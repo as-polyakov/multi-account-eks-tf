@@ -9,13 +9,19 @@ provider "aws" {
   region = var.region
 }
 
+data "aws_subnets" "vpc_subnets" {
+  filter {
+    name   = "vpc-id"
+    values = [var.vpc_id]
+  }
+}
 
 module "eks_cluster" {
   source  = "terraform-aws-modules/eks/aws"
   version = "19.16.0"  # Use the latest version of the AWS EKS module
 
   cluster_name = var.cluster_name
-  #subnets      = ["subnet-1", "subnet-2", "subnet-3"]  # Replace with your actual subnet IDs
+  subnet_ids      = "${data.aws_subnets.vpc_subnets.ids}"
   vpc_id       = var.vpc_id # Replace with your actual VPC ID
 
   tags = {
@@ -29,7 +35,7 @@ module "node_group" {
   version = "19.16.0"  # Use the latest version of the AWS EKS module
 
   cluster_name      = var.cluster_name
-  #subnets           = ["subnet-1", "subnet-2", "subnet-3"]  # Replace with your actual subnet IDs
+  subnet_ids      = "${data.aws_subnets.vpc_subnets.ids}"
   instance_types     = [var.node_type]
   desired_size = 1
   max_size      = 5
