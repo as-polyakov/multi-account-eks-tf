@@ -42,7 +42,7 @@ module "node_group" {
   name = "node-group"
 
   cluster_name      = var.cluster_name
-  subnet_ids      = "${data.aws_subnets.vpc_subnets.ids}"
+  subnet_ids = [for subnet in data.aws_subnet.this : subnet.id if subnet.availability_zone != "us-east-1e"]
   instance_types     = [var.node_type]
   desired_size = 1
   max_size      = 5
