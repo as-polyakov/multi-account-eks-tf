@@ -9,11 +9,16 @@ provider "aws" {
   region = var.region
 }
 
-data "aws_subnets" "vpc_subnets" {
+data "aws_subnets" "this" {
   filter {
     name   = "vpc-id"
     values = [var.vpc_id]
   }
+}
+
+data "aws_subnet" "this" {
+  for_each = toset(data.aws_subnets.this.ids)
+  id       = each.value
 }
 
 module "eks_cluster" {
@@ -21,7 +26,8 @@ module "eks_cluster" {
   version = "19.16.0"  # Use the latest version of the AWS EKS module
 
   cluster_name = var.cluster_name
-  subnet_ids      = "${data.aws_subnets.vpc_subnets.ids}"
+  #subnet_ids      = "${data.aws_subnets.vpc_subnets.ids}"
+  subnet_ids = [for subnet in data.aws_subnet.this : subnet.id if subnet.availability_zone != "us-east-1e"]
   vpc_id       = var.vpc_id # Replace with your actual VPC ID
 
   tags = {
