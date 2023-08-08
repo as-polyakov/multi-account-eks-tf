@@ -41,7 +41,7 @@ module "node_group" {
   version = "19.16.0"  # Use the latest version of the AWS EKS module
   name = "node-group"
 
-  cluster_name      = var.cluster_name
+  cluster_name      = module.eks_cluster.cluster_name
   subnet_ids = [for subnet in data.aws_subnet.this : subnet.id if subnet.availability_zone != "us-east-1e"]
   instance_types     = [var.node_type]
   desired_size = 1
