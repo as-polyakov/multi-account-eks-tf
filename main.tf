@@ -2,8 +2,8 @@
 
 provider "aws" {
   assume_role {
-    #role_arn     = "arn:aws:iam::${var.aws_account_id}:role/apolyakov-cross-account-eks"
-    role_arn     = "arn:aws:iam::${var.aws_account_id}:role/jenkins"
+    role_arn     = "arn:aws:iam::${var.aws_account_id}:role/apolyakov-cross-account-eks"
+    #role_arn     = "arn:aws:iam::${var.aws_account_id}:role/jenkins"
     session_name = "terraform"
   }
   region = var.region
