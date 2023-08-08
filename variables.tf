@@ -1,3 +1,4 @@
+
 variable "region" {
   description = "AWS region"
   type        = string
@@ -23,3 +24,15 @@ variable "aws_account_id" {
   description = "The AWS account ID where the resources will be created."
   type        = string
 }
+
+variable "cluster_iam_role_name" {
+  description = "IAM role name for the cluster."
+  type        = string
+}
+variable "cluster_version" {
+  description = "Kubernetes version to use for the EKS cluster."
+  type        = string
+}
+
+
+

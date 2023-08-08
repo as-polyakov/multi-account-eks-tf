@@ -22,13 +22,13 @@ data "aws_subnet" "this" {
 }
 
 module "eks_cluster" {
-  source  = "terraform-aws-modules/eks/aws"
-  version = "19.16.0"  # Use the latest version of the AWS EKS module
-
-  cluster_name = var.cluster_name
-  #subnet_ids      = "${data.aws_subnets.vpc_subnets.ids}"
-  subnet_ids = [for subnet in data.aws_subnet.this : subnet.id if subnet.availability_zone != "us-east-1e"]
-  vpc_id       = var.vpc_id # Replace with your actual VPC ID
+  source  = "github.com/datarobot/ci-tf-modules-aws-eks-cluster?ref=CI-1397"
+  name                                  = var.cluster_name
+  cluster_version                       = var.cluster_version
+  vpc_id                                = var.vpc_id
+  cluster_iam_role_name                 = var.cluster_iam_role_name
+  default_group_create_endpoint_rules   = false
+  subnets                               = []
 
   tags = {
     Terraform   = "true"
