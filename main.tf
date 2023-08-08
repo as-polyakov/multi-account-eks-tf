@@ -33,6 +33,7 @@ module "eks_cluster" {
 module "node_group" {
   source  = "terraform-aws-modules/eks/aws//modules/eks-managed-node-group"
   version = "19.16.0"  # Use the latest version of the AWS EKS module
+  name = "${var.cluster_name}-node-group"
 
   cluster_name      = var.cluster_name
   subnet_ids      = "${data.aws_subnets.vpc_subnets.ids}"
